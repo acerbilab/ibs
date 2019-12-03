@@ -28,8 +28,6 @@ Besides formal citations, you can demonstrate your appreciation for our work in 
 - Follow us on Twitter ([Luigi](https://twitter.com/AcerbiLuigi), [Bas](https://twitter.com/basvanopheusden)) for updates about IBS and other projects we are involved with;
 - Tell us about your model-fitting problem and your experience with IBS (positive or negative) at <luigi.acerbi@gmail.com> or <svo213@nyu.edu> (putting 'IBS' in the subject of the email).
 
-You may also want to check out [Bayesian Adaptive Direct Search](https://github.com/lacerbi/bads) (BADS), our method for fast Bayesian optimization.
-
 ### License
 
 IBS is released under the terms of the [MIT License](https://github.com/lacerbi/ibs/blob/master/LICENSE.txt).
