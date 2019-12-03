@@ -30,4 +30,4 @@ Besides formal citations, you can demonstrate your appreciation for our work in 
 
 ### License
 
-IBS is released under the terms of the [MIT License](https://github.com/lacerbi/ibs/blob/master/LICENSE.txt).
+The IBS code is released under the terms of the [MIT License](https://github.com/lacerbi/ibs/blob/master/LICENSE.txt).
