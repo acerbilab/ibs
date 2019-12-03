@@ -16,7 +16,7 @@ You can cite IBS in your work with something along the lines of
 
 > We estimated the log-likelihood using inverse binomial sampling (IBS; de Groot, 1959; van Opheusden et al., 2019), a technique that produces unbiased and efficient estimates of the log-likelihood via simulation. 
 
-If you use IBS in conjuction with [Bayesian Adaptive Direct Search](https://github.com/lacerbi/bads) (as recommended in the paper), you could add
+If you use IBS in conjunction with [Bayesian Adaptive Direct Search](https://github.com/lacerbi/bads) (as recommended in the paper), you could add
 
 > We obtained maximum-likelihood estimates of the model parameters via Bayesian Adaptive Direct Search (BADS; Acerbi & Ma, 2017), a hybrid Bayesian optimization algorithm which affords stochastic objective evaluations.
 
