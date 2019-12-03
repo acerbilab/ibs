@@ -2,7 +2,7 @@
 
 ## What is it
 
-IBS is a technique to obtain unbiased, efficient estimates of the log-likelihood of a model by simulation. [[1]((#references),[2](#references)]
+IBS is a technique to obtain unbiased, efficient estimates of the log-likelihood of a model by simulation. [[1](#references),[2](#references)]
 
 The typical scenario is the case in which you have an *implicit* model from which you can randomly draw synthetic observations (for a given parameter vector), but cannot evaluate the log-likelihood analytically or numerically. In other words, IBS affords likelihood-based inference for likelihood-free models.
 
