@@ -12,7 +12,7 @@ In this repository, we will store implementations and example usages of IBS in v
 
 ## References
 
-1. van Opheusden\*, B., Acerbi\*, L. & Ma, W.J. (2019). Unbiased and efficient log-likelihood estimation with inverse binomial sampling. *arXiv preprint*. (\* equal contribution) ([preprint on arXiv]())
+1. van Opheusden\*, B., Acerbi\*, L. & Ma, W.J. (2020). Unbiased and efficient log-likelihood estimation with inverse binomial sampling. *arXiv preprint*. (\* equal contribution) ([preprint on arXiv]())
 
 You can cite IBS in your work with something along the lines of
 
