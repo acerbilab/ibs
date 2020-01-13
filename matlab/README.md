@@ -9,4 +9,4 @@ This folder contains MATLAB implementations and examples of IBS; see the [home p
 - `ibslike.m` is an advanced vectorized implementation of IBS, which supports several advanced features (still work in progress). Read the documentation in the file for usage information. 
   - Note that `ibslike` returns the *negative* log-likelihood as it is meant to be used with an optimization method such as BADS.
 - `ibs_basic.m` is a bare-bone implementation of IBS for didactic purposes.
-- `psycho_gen` and `psycho_nll` are, respectively, the generative model (simulator) and the negative log-likelihood function for the orientation discrimination model used as example in the tutorial (see also Section 5.2 in the IBS paper).
+- `psycho_gen.m` and `psycho_nll.m` are functions implementing, respectively, the generative model (simulator) and the negative log-likelihood function for the orientation discrimination model used as example in the tutorial (see also Section 5.2 in the IBS paper).
