@@ -1,6 +1,5 @@
 function [nlogL,nlogLvar,output] = ibslike(fun,params,respMat,designMat,options,varargin)
 %IBSLIKE Unbiased negative log-likelihood via inverse binomial sampling.
-%
 %   NLOGL = IBLLIKE(FUN,PARAMS,RESPMAT,DESIGNMAT) returns unbiased estimate 
 %   NLOGL of the negative of the log-likelihood for the simulated model 
 %   and data, calculated using inverse binomial sampling (IBS). 
