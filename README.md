@@ -8,11 +8,11 @@ The typical scenario is the case in which you have an *implicit* model from whic
 
 ## Code
 
-This repository stores basic and advanced implementations and example usages of IBS in various programming languages. For the moment, we only have a MATLAB implementation, but we plan to include other ones (e.g., in Python).
+This repository stores basic and advanced implementations and example usages of IBS in various programming languages. For the moment, we only have a MATLAB implementation, but we plan to include other ones (e.g., Python).
 
 ## References
 
-1. van Opheusden\*, B., Acerbi\*, L. & Ma, W.J. (2020). Unbiased and efficient log-likelihood estimation with inverse binomial sampling. *arXiv preprint*. (\* equal contribution) ([preprint on arXiv]())
+1. van Opheusden\*, B., Acerbi\*, L. & Ma, W.J. (2020). Unbiased and efficient log-likelihood estimation with inverse binomial sampling. *arXiv preprint*. (\* equal contribution) ([preprint on arXiv](https://arxiv.org/abs/2001.03985))
 
 You can cite IBS in your work with something along the lines of
 
@@ -28,7 +28,7 @@ Besides formal citations, you can demonstrate your appreciation for our work in 
 
 - *Star* the IBS repository on GitHub;
 - Follow us on Twitter ([Luigi](https://twitter.com/AcerbiLuigi), [Bas](https://twitter.com/basvanopheusden)) for updates about IBS and other projects we are involved with;
-- Tell us about your model-fitting problem and your experience with IBS (positive or negative) at <luigi.acerbi@gmail.com> or <svo213@nyu.edu> (putting 'IBS' in the subject of the email).
+- Tell us about your model-fitting problem and your experience with IBS (positive or negative) at <luigi.acerbi@gmail.com> or <basvanopheusden@nyu.edu> (putting 'IBS' in the subject of the email).
 
 ### License
 
