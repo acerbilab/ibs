@@ -8,7 +8,9 @@ The typical scenario is the case in which you have an *implicit* model from whic
 
 ## Code
 
-This repository stores basic and advanced implementations and example usages of IBS in various programming languages. For the moment, we only have a MATLAB implementation, but we plan to include other ones (e.g., Python).
+This repository stores basic and advanced implementations and example usages of IBS in various programming languages for users of the method. For the moment, we only have a MATLAB implementation, but we plan to include other ones (e.g., Python).
+
+The code used to produce results in the paper [[1](#references)] is available in the development repository [here](https://github.com/basvanopheusden/ibs-development).
 
 ## References
 
