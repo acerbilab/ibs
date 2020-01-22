@@ -67,8 +67,8 @@ function [nlogL,nlogLvar,output] = ibslike(fun,params,respMat,designMat,options,
 %   Authors (copyright): Luigi Acerbi and Bas van Opheusden, 2020
 %   e-mail: luigi.acerbi@{gmail.com,nyu.edu}, basvanopheusden@nyu.edu
 %   URL: http://luigiacerbi.com
-%   Version: 0.9
-%   Release date: Jan 14, 2020
+%   Version: 0.901
+%   Release date: Jan 22, 2020
 %   Code repository: https://github.com/lacerbi/ibs
 %--------------------------------------------------------------------------
 
@@ -324,9 +324,13 @@ for iRep = 1:options.Nreps
         if nlogL_sum > options.NegLogLikeThreshold
             T = Trials(hits < 1);
             if ~isempty(T)
-                K(T(hits_new),iRep) = offset; 
-                nlogL(T(hits_new),iRep) = psi(K(T(hits_new),iRep)) - psi(1);
+                %K(T(hits_new),iRep) = offset; 
+                %nlogL(T(hits_new),iRep) = psi(K(T(hits_new),iRep)) - psi(1);
+                K(T,iRep) = offset;
+                nlogL(T,iRep) = psi(K(T,iRep)) - psi(1);
             end
+            T = [];
+            break;
         end
     end    
 end
