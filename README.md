@@ -8,7 +8,9 @@ The typical scenario is the case in which you have an *implicit* model from whic
 
 ## Code
 
-This repository stores basic and advanced implementations and example usages of IBS in various programming languages for users of the method. For the moment, we only have a MATLAB implementation, but we plan to include other ones (e.g., Python).
+This repository stores basic and advanced implementations and example usages of IBS in various programming languages for users of the method. At the moment, we have a MATLAB implementation and we plan to shortly include other ones (e.g., Python).
+
+- Go to the [MATLAB code page](https://github.com/lacerbi/ibs/tree/master/matlab).
 
 The code used to produce results in the paper [[1](#references)] is available in the development repository [here](https://github.com/basvanopheusden/ibs-development).
 
@@ -18,7 +20,7 @@ The code used to produce results in the paper [[1](#references)] is available in
 
 You can cite IBS in your work with something along the lines of
 
-> We estimated the log-likelihood using inverse binomial sampling (IBS; van Opheusden et al., 2019), a technique that produces unbiased and efficient estimates of the log-likelihood via simulation. 
+> We estimated the log-likelihood using inverse binomial sampling (IBS; van Opheusden, Acerbi & Ma, 2020), a technique that produces unbiased and efficient estimates of the log-likelihood via simulation. 
 
 If you use IBS in conjunction with [Bayesian Adaptive Direct Search](https://github.com/lacerbi/bads), as recommended in the paper, you could add
 
