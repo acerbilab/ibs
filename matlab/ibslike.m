@@ -83,6 +83,8 @@ defopts.Vectorized      = 'auto';       % Use vectorized sampling algorithm with
 defopts.Acceleration    = 1.5;          % Acceleration factor for vectorized sampling
 defopts.NsamplesPerCall = 0;            % # starting samples per trial per function call (0 = choose automatically)
 defopts.MaxIter         = 1e5;          % Maximum number of iterations (per trial and estimate)
+defopts.ReturnPositive  = false;        % If true, the first returned output is the *positive* log-likelihood
+defopts.ReturnStd       = false;        % If true, the second returned output is the standard deviation of the estimate
 
 %% If called with no arguments or with 'defaults', return default options
 if nargout <= 1 && (nargin == 0 || (nargin == 1 && ischar(fun) && strcmpi(fun,'defaults')))
@@ -109,6 +111,7 @@ end
 options.MaxSamples      = 250;          % Maximum number of samples per function call
 options.AccelerationThreshold = 0.1;    % Keep accelerating until threshold is passed (in s)
 options.VectorizedThreshold  = 0.1;     % Max threshold for using vectorized algorithm (in s)
+options.MaxMem          = 1e6;          % Maximum number of samples for vectorized implementation
 
 % NSAMPLESPERCALL should be a scalar integer
 if ~isnumeric(options.NsamplesPerCall) || ~isscalar(options.NsamplesPerCall)
@@ -185,7 +188,13 @@ end
 
 % Return negative log-likelihood and variance summed over trials
 nlogL = sum(nlogL);
-if nargout > 1; nlogLvar = sum(nlogLvar); end
+if options.ReturnPositive; nlogL = -nlogL; end
+if nargout > 1
+    nlogLvar = sum(nlogLvar);
+    if options.ReturnStd    % Return standard deviation instead of variance
+        nlogLvar = sqrt(nlogLvar);
+    end
+end
 
 end
 
@@ -223,9 +232,11 @@ for iter = 1:MaxIter
     % Pick trials that need more hits, sample multiple times
     T = Trials(Nhits < targetHits);
     if isempty(T); break; end
-    
+        
     % With accelerated sampling, might request multiple samples at once
     Nsamples = min(options.MaxSamples,max(1,round(samples_level)));
+    MaxSamples = ceil(options.MaxMem / numel(T));
+    Nsamples = min(Nsamples, MaxSamples);
     Tmat = repmat(T,[1,Nsamples]);
     
     % Simulate trials
