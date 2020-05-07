@@ -1,6 +1,6 @@
 function L = ibs_basic(fun,theta,R,S)
 %IBS_BASIC A barebone implementation of inverse binomial sampling (IBS).
-%  IBS_BASIC returns unbiased estimate L of the log-likelihood for the 
+%  IBS_BASIC returns an unbiased estimate L of the log-likelihood for the 
 %  simulated model and data, calculated using inverse binomial sampling. 
 %  FUN is a function handle to a function that simulates the model's 
 %  responses (see below). 
