@@ -1,4 +1,4 @@
-function [nlogL,nlogLvar,output] = ibslike(fun,params,respMat,designMat,options,varargin)
+function [nlogL,nlogLvar,exitflag,output] = ibslike(fun,params,respMat,designMat,options,varargin)
 %IBSLIKE Unbiased negative log-likelihood via inverse binomial sampling.
 %   NLOGL = IBLLIKE(FUN,PARAMS,RESPMAT,DESIGNMAT) returns unbiased estimate 
 %   NLOGL of the negative of the log-likelihood for the simulated model 
@@ -33,11 +33,18 @@ function [nlogL,nlogLvar,output] = ibslike(fun,params,respMat,designMat,options,
 %   [NLOGL,NLOGLVAR] = IBSLIKE(...) also returns an estimate NLOGVAR of the
 %   variance of the log likelihood.
 %
-%   [NLOGL,NLOGLVAR,PC] = IBSLIKE(...) returns an array of probabilities of
-%   correct response in each trial. These estimated probabilities are biased.
+%   [NLOGL,NLOGLVAR,EXITFLAG] = IBSLIKE(...) returns an EXITFLAG that 
+%   describes the exit condition. Possible values of EXITFLAG and the 
+%   corresponding exit conditions are
 %
-%   [NLOGL,NLOGLVAR,PC,OUTPUT] = IBSLIKE(...) returns a structure OUTPUT 
-%   with additional information about the sampling.
+%    2  IBS terminated after reaching the maximum runtime specified by the 
+%       user (the estimate can be arbitrarily biased).
+%    1  IBS terminated after reaching the negative log-likelihood
+%       threshold specified by the user (the estimate is biased).
+%    0  Correct run of IBS; the estimate is unbiased.
+%
+%   [NLOGL,NLOGLVAR,EXITFLAG,OUTPUT] = IBSLIKE(...) returns a structure 
+%   OUTPUT with additional information about the sampling.
 %
 %   OPTIONS = IBSLIKE('defaults') returns a basic default OPTIONS structure.
 %
@@ -75,6 +82,8 @@ function [nlogL,nlogLvar,output] = ibslike(fun,params,respMat,designMat,options,
 if nargin < 4; designMat = []; end
 if nargin < 5; options = []; end
 
+t0 = tic;
+
 % Default options
 % defopts.Display       = 'off';        % Level of display on screen
 defopts.Nreps           = 10;           % # independent log-likelihood estimates per trial
@@ -85,6 +94,7 @@ defopts.NsamplesPerCall = 0;            % # starting samples per trial per funct
 defopts.MaxIter         = 1e5;          % Maximum number of iterations (per trial and estimate)
 defopts.ReturnPositive  = false;        % If true, the first returned output is the *positive* log-likelihood
 defopts.ReturnStd       = false;        % If true, the second returned output is the standard deviation of the estimate
+defopts.MaxTime         = Inf;          % Maximum time for a IBS call (in seconds)
 
 %% If called with no arguments or with 'defaults', return default options
 if nargout <= 1 && (nargin == 0 || (nargin == 1 && ischar(fun) && strcmpi(fun,'defaults')))
@@ -141,6 +151,12 @@ if ~isnumeric(options.NegLogLikeThreshold) || ~isscalar(options.NegLogLikeThresh
     error('ibslike:NegLogLikeThreshold','OPTIONS.NegLogLikeThreshold should be a positive scalar (including Inf).');
 end
 
+% MAXTIME should be a positive scalar (including Inf)
+if ~isnumeric(options.MaxTime) || ~isscalar(options.MaxTime) || ...
+        options.MaxTime <= 0
+    error('ibslike:MaxTime','OPTIONS.MaxTime should be a positive scalar (or Inf).');
+end
+
 Trials = (1:Ntrials)';
 funcCount = 0;
 
@@ -161,16 +177,19 @@ else
 end
 
 if vectorized_flag
-    [nlogL,K,Nreps,Ns,fc] = vectorized_ibs_sampling(fun,params,respMat,designMat,simdata,elapsed_time,options,varargin{:});
+    [nlogL,K,Nreps,Ns,fc,exitflag] = ...
+        vectorized_ibs_sampling(fun,params,respMat,designMat,simdata,elapsed_time,t0,options,varargin{:});
 else
-    [nlogL,K,Nreps,Ns,fc] = loop_ibs_sampling(fun,params,respMat,designMat,simdata,elapsed_time,options,varargin{:});
+    [nlogL,K,Nreps,Ns,fc,exitflag] = ...
+        loop_ibs_sampling(fun,params,respMat,designMat,simdata,elapsed_time,t0,options,varargin{:});
 end
 funcCount = funcCount + fc;
 
 % Variance of estimate per trial
 if nargout > 1
-    Ktab = -(psi(1,1:max(K(:)))' - psi(1,1));    
-    LLvar = Ktab(K);   
+    K_max = max(max(K(:),1));
+    Ktab = -(psi(1,1:K_max)' - psi(1,1));    
+    LLvar = Ktab(max(K,1));   
     nlogLvar = sum(LLvar,2)./Nreps.^2;
 end
 
@@ -195,12 +214,13 @@ end
 end
 
 %--------------------------------------------------------------------------
-function [nlogL,K,Nreps,Ns,fc] = vectorized_ibs_sampling(fun,params,respMat,designMat,simdata0,elapsed_time0,options,varargin)
+function [nlogL,K,Nreps,Ns,fc,exitflag] = vectorized_ibs_sampling(fun,params,respMat,designMat,simdata0,elapsed_time0,t0,options,varargin)
 
 Ntrials = size(respMat,1);
 Trials = (1:Ntrials)';
 Ns = 0;
 fc = 0;
+exitflag = 0;
 
 Psi_tab = [];   % Empty PSI table
 
@@ -229,6 +249,10 @@ end
 for iter = 1:MaxIter
     % Pick trials that need more hits, sample multiple times
     T = Trials(Ridx <= targetHits);
+    if isfinite(options.MaxTime) && toc(t0) > options.MaxTime
+        T = []; 
+        exitflag = 2; 
+    end
     if isempty(T); break; end
     
     Ttrials = numel(T);    % Number of trials under consideration
@@ -331,6 +355,7 @@ for iter = 1:MaxIter
             idx_move = Ridx == Rmin;
             Ridx(idx_move) = Rmin+1;
             K_open(idx_move) = 0;
+            exitflag = 1;
         end
     end
 end
@@ -351,13 +376,14 @@ end
 
 
 %--------------------------------------------------------------------------
-function [nlogL,K,Nreps,Ns,fc] = loop_ibs_sampling(fun,params,respMat,designMat,simdata0,elapsed_time0,options,varargin)
+function [nlogL,K,Nreps,Ns,fc,exitflag] = loop_ibs_sampling(fun,params,respMat,designMat,simdata0,elapsed_time0,t0,options,varargin)
 
 Ntrials = size(respMat,1);
 Trials = (1:Ntrials)';
 MaxIter = options.MaxIter;
+exitflag = 0;
 
-K = NaN(Ntrials,options.Nreps);
+K = zeros(Ntrials,options.Nreps);
 Ns = 0;
 fc = 0;
 Psi_tab = [];
@@ -366,6 +392,10 @@ for iRep = 1:options.Nreps
     
     offset = 1;
     hits = zeros(Ntrials,1);
+    if isfinite(options.MaxTime) && toc(t0) > options.MaxTime
+        exitflag = 2;
+        break;
+    end
     
     for iter = 1:MaxIter
         % Pick trials that need more hits, sample multiple times
@@ -396,9 +426,18 @@ for iRep = 1:options.Nreps
             nlogL_sum = -sum(LL_mat,1);            
             if nlogL_sum > options.NegLogLikeThreshold
                 T = [];
+                exitflag = 1;
                 break;
             end
         end
+        
+        % Terminate if above maximum allowed runtime
+        if isfinite(options.MaxTime) && toc(t0) > options.MaxTime
+            T = [];
+            exitflag = 2;
+            break;
+        end
+
     end    
 end
 
@@ -407,7 +446,7 @@ if ~isempty(T)
         'Maximum number of iterations reached and algorithm did not converge. Check FUN and DATA.');
 end
     
-Nreps = options.Nreps;
+Nreps = sum(K > 0,2);
 [LL_mat,Psi_tab] = get_LL_from_K(Psi_tab,K);
 nlogL = sum(-LL_mat,2)./Nreps;
 
