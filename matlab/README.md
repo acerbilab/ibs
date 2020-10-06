@@ -1,6 +1,7 @@
 # Inverse binomial sampling (IBS) for MATLAB
 
 This folder contains MATLAB implementations and examples of IBS; see the [home page](https://github.com/lacerbi/ibs) for general information.
+For practical recommendations and any other question, check out the FAQ on the [IBS wiki](https://github.com/lacerbi/ibs/wiki).
 
 ## Code
 
