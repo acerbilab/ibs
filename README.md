@@ -14,6 +14,8 @@ This repository stores basic and advanced implementations and example usages of 
 
 The code used to produce results in the paper [[1](#references)] is available in the development repository [here](https://github.com/basvanopheusden/ibs-development).
 
+For practical recommendations and any other question, check out the FAQ on the [IBS wiki](https://github.com/lacerbi/ibs/wiki).
+
 ## References
 
 1. van Opheusden\*, B., Acerbi\*, L. & Ma, W.J. (2020). Unbiased and efficient log-likelihood estimation with inverse binomial sampling. *arXiv preprint*. (\* equal contribution) ([preprint on arXiv](https://arxiv.org/abs/2001.03985))
