@@ -360,7 +360,7 @@ for iter = 1:MaxIter
         Rmin = min(Ridx(T));    % Find repeat still ongoing
         if Rmin > size(K_mat,1); continue; end
         [LL_temp,Psi_tab] = get_LL_from_K(Psi_tab,K_mat(Rmin,:));
-        nLL_temp = -sum(LL_temp,2);
+        nLL_temp = -sum(LL_temp,1);
         if nLL_temp > options.NegLogLikeThreshold
             idx_move = Ridx == Rmin;
             Ridx(idx_move) = Rmin+1;
