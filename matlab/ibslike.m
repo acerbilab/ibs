@@ -74,8 +74,8 @@ function [nlogL,nlogLvar,exitflag,output] = ibslike(fun,params,respMat,designMat
 %   Authors (copyright): Luigi Acerbi and Bas van Opheusden, 2020
 %   e-mail: luigi.acerbi@{gmail.com,nyu.edu}, basvanopheusden@nyu.edu
 %   URL: http://luigiacerbi.com
-%   Version: 0.92
-%   Release date: Sep 03, 2020
+%   Version: 0.93
+%   Release date: Oct 14, 2020
 %   Code repository: https://github.com/lacerbi/ibs
 %--------------------------------------------------------------------------
 
