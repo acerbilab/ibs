@@ -7,7 +7,7 @@ For practical recommendations and any other question, check out the FAQ on the [
 
 - `ibs_example.m` is an annotated tutorial with a full working example usage of IBS.
   - In order to run the tutorial, you will need to have installed Bayesian Adaptive Direct Search ([BADS](https://github.com/lacerbi/bads)). 
-- `ibslike.m` is an advanced vectorized implementation of IBS, which supports several advanced features (still work in progress as we add more advanced features). Please read the documentation in the file for usage information. 
+- `ibslike.m` is an advanced vectorized implementation of IBS, which supports several advanced features (still work in progress as we add more advanced features). Please read the documentation in the file for usage information, and refer to the [dedicated section on the FAQ](https://github.com/lacerbi/ibs/wiki#matlab-implementation-ibslike) for specific questions about this MATLAB implementation.
   - Note that `ibslike` returns the *negative* log-likelihood as it is meant to be used with an optimization method such as BADS.
   - Run `ibslike('test')` for a battery of unit tests.
   - If you want to run `ibslike` with [Variational Bayesian Monte Carlo](https://github.com/lacerbi/vbmc) (VBMC), note that you need to set the IBS options as
