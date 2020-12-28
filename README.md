@@ -23,7 +23,7 @@ For practical recommendations and any other question, check out the FAQ on the [
 
 ## References
 
-1. van Opheusden\*, B., Acerbi\*, L. & Ma, W.J. (2020). Unbiased and efficient log-likelihood estimation with inverse binomial sampling. *arXiv preprint*. (\* equal contribution) ([preprint on arXiv](https://arxiv.org/abs/2001.03985))
+1. van Opheusden\*, B., Acerbi\*, L. & Ma, W.J. (2020). Unbiased and efficient log-likelihood estimation with inverse binomial sampling. *PLoS Computational Biology* 16(12): e1008483. (\* equal contribution) ([link](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008483)) 
 
 You can cite IBS in your work with something along the lines of
 
@@ -39,7 +39,7 @@ Besides formal citations, you can demonstrate your appreciation for our work in 
 
 - *Star* the IBS repository on GitHub;
 - Follow us on Twitter ([Luigi](https://twitter.com/AcerbiLuigi), [Bas](https://twitter.com/basvanopheusden)) for updates about IBS and other projects we are involved with;
-- Tell us about your model-fitting problem and your experience with IBS (positive or negative) at <luigi.acerbi@gmail.com> or <basvanopheusden@nyu.edu> (putting 'IBS' in the subject of the email).
+- Tell us about your model-fitting problem and your experience with IBS (positive or negative) at <luigi.acerbi@helsinki.fi> or <svo@princeton.edu> (putting 'IBS' in the subject of the email).
 
 ### License
 
