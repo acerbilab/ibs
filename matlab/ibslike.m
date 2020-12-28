@@ -62,7 +62,8 @@ function [nlogL,nlogLvar,exitflag,output] = ibslike(fun,params,respMat,designMat
 %   Reference: 
 %   van Opheusden*, B., Acerbi*, L. & Ma, W. J. (2020), "Unbiased and 
 %   efficient log-likelihood estimation with inverse binomial sampling". 
-%   (* equal contribution), arXiv preprint https://arxiv.org/abs/2001.03985
+%   (* equal contribution), PLoS Computational Biology 16(12): e1008483.
+%   Link: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008483
 %
 %   See also @.
 
@@ -72,10 +73,10 @@ function [nlogL,nlogLvar,exitflag,output] = ibslike(fun,params,respMat,designMat
 % (https://opensource.org/licenses/MIT).
 %
 %   Authors (copyright): Luigi Acerbi and Bas van Opheusden, 2020
-%   e-mail: luigi.acerbi@{gmail.com,nyu.edu}, basvanopheusden@nyu.edu
+%   e-mail: luigi.acerbi@helsinki.fi, svo@princeton.edu
 %   URL: http://luigiacerbi.com
-%   Version: 0.93
-%   Release date: Oct 14, 2020
+%   Version: 0.94
+%   Release date: Dec 28, 2020
 %   Code repository: https://github.com/lacerbi/ibs
 %--------------------------------------------------------------------------
 
