@@ -6,7 +6,7 @@ IBS is a technique to obtain unbiased, efficient estimates of the log-likelihood
 
 The typical scenario is the case in which you have a *simulator*, that is a model from which you can randomly draw synthetic observations (for a given parameter vector), but cannot evaluate the log-likelihood analytically or numerically. In other words, IBS affords likelihood-based inference for models without explicit likelihood functions (also known as implicit models).
 
-IBS will be commonly used as a part of an algorithm for maximum-likelihood estimation or Bayesian inference.
+IBS is commonly used as a part of an algorithm for maximum-likelihood estimation or Bayesian inference.
 
 - For maximum-likelihood (or maximum-a-posteriori) estimation, we recommend to use IBS combined with [Bayesian Adaptive Direct Search (BADS)](https://github.com/lacerbi/bads).
 - For Bayesian inference of posterior distributions and model evidence, we recommend to use IBS with [Variational Bayesian Monte Carlo (VBMC)](https://github.com/lacerbi/vbmc).
