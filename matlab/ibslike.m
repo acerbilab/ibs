@@ -63,7 +63,7 @@ function [nlogL,nlogLvar,exitflag,output] = ibslike(fun,params,respMat,designMat
 %   van Opheusden*, B., Acerbi*, L. & Ma, W. J. (2020), "Unbiased and 
 %   efficient log-likelihood estimation with inverse binomial sampling". 
 %   (* equal contribution), PLoS Computational Biology 16(12): e1008483.
-%   Link: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008483
+%   Link: https://doi.org/10.1371/journal.pcbi.1008483
 %
 %   See also @.
 
@@ -75,8 +75,8 @@ function [nlogL,nlogLvar,exitflag,output] = ibslike(fun,params,respMat,designMat
 %   Authors (copyright): Luigi Acerbi and Bas van Opheusden, 2020
 %   e-mail: luigi.acerbi@helsinki.fi, svo@princeton.edu
 %   URL: http://luigiacerbi.com
-%   Version: 0.94
-%   Release date: Dec 28, 2020
+%   Version: 0.95
+%   Release date: Jan 5, 2021
 %   Code repository: https://github.com/lacerbi/ibs
 %--------------------------------------------------------------------------
 
@@ -289,6 +289,13 @@ for iter = 1:MaxIter
         end
         elapsed_time = toc(fun_clock);
     end
+    
+    % Check that the returned simulated data have the right size
+    if size(simdata,1) ~= numel(Tmat)
+        error('ibslike:SizeMismatch', ...
+            'Number of rows of returned simulated data does not match the number of requested trials.');
+    end
+    
     Ns = Ns + Ttrials;
     
     % Accelerated sampling
@@ -373,7 +380,7 @@ end
 
 if ~isempty(T)
     error('ibslike:ConvergenceFail', ...
-        'Maximum number of iterations reached and algorithm did not converge. Check FUN and DATA.');
+        'Maximum number of iterations or time limit reached and algorithm did not converge. Check FUN and DATA.');
 end
     
 % Log likelihood estimate per trial and run lengths K for each repetition
@@ -423,6 +430,13 @@ for iRep = 1:options.Nreps
             simdata = fun(params,designMat(T(:),:),varargin{:});   
             fc = fc + 1;
         end
+        
+        % Check that the returned simulated data have the right size
+        if size(simdata,1) ~= numel(T)
+            error('ibslike:SizeMismatch', ...
+                'Number of rows of returned simulated data does not match the number of requested trials.');
+        end
+                
         Ns = Ns + numel(T); % Count samples
         hits_new = all(respMat(T(:),:) == simdata,2);    
         hits(T) = hits(T) + hits_new;
@@ -449,12 +463,12 @@ for iRep = 1:options.Nreps
             break;
         end
 
+    end
+    
+    if ~isempty(T)
+        error('ibslike:ConvergenceFail', ...
+            'Maximum number of iterations reached and algorithm did not converge. Check FUN and DATA.');
     end    
-end
-
-if ~isempty(T)
-    error('ibslike:ConvergenceFail', ...
-        'Maximum number of iterations reached and algorithm did not converge. Check FUN and DATA.');
 end
     
 Nreps = sum(K > 0,2);
