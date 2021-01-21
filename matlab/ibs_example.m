@@ -1,9 +1,16 @@
 % IBS_EXAMPLE Example script for running inverse binomial sampling (IBS)
 
 % In this example, we fit some simple orientation discrimination data using
-% IBS and BADS. The model is described in Section 5.2 of the manuscript.
+% IBS and BADS. The model is described in the "Orientation discrimination" 
+% section of the Results in the published paper.
 % Note that this model is very simple and used only for didactic purposes;
 % one should use the analytical log-likelihood whenever available.
+%
+%   Reference: 
+%   van Opheusden*, B., Acerbi*, L. & Ma, W. J. (2020), "Unbiased and 
+%   efficient log-likelihood estimation with inverse binomial sampling". 
+%   (* equal contribution), PLoS Computational Biology 16(12): e1008483.
+%   Link: https://doi.org/10.1371/journal.pcbi.1008483
 
 %% Generate simulated dataset
 
@@ -21,40 +28,62 @@ theta_true = [eta,bias,lapse];  % Generating parameter vector
 S = 3*randn(Ntrials,1);        % Generate stimulus orientation per trial
 R = psycho_gen(theta_true,S);  % Generate fake subject responses
 
-%% Maximum-likelihood estimation (MLE)
-
-% We fit the data via maximum-likelihood estimation using Bayesian Adaptive 
-% Direct Search (BADS), a particularly effective optimization algorithm.
-% If you do not have the BADS toolbox installed, you can freely download it 
-% from here: https://github.com/lacerbi/bads
-
-% We set the lower/upper bounds for optimization (in particular, note that 
+% We set the lower/upper bounds for the parameters (in particular, note that 
 % we set a nonzero lower bound for the lapse rate)
 LB = [log(0.1) -2 0.01];
 UB = [log(10) 2 1];
 
-% We also set the "plausible" lower/upper bounds used by BADS
-PLB = [log(0.1) -1 0.01];
+% We also set the "plausible" lower/upper bounds representing where we
+% would expect to find most parameters (this is not a prior, it just
+% identifies a region e.g. for the starting points)
+PLB = [log(0.2) -1 0.02];
 PUB = [log(5) 1 0.2];
+
+
+%% Maximum-likelihood estimation (MLE)
+
+% We fit the data via maximum-likelihood estimation using Bayesian Adaptive 
+% Direct Search (BADS), a particularly effective optimization algorithm for
+% noisy target functions.
+% If you do not have the BADS toolbox installed, you can freely download it 
+% from here: https://github.com/lacerbi/bads
+% Please ensure you have the latest version of BADS installed (v1.0.6 or
+% more), as it incorporates tweaks that improve performance with IBS.
+
+fprintf('Maximum-likelihood estimation with BADS using IBS...\n');
+fprintf('(press a key to continue)\n');
+pause;
+
+if isempty(which('bads.m'))                     % Check that you have BADS
+    error('BADS not found. You can install it from here: https://github.com/lacerbi/bads');
+end
 
 % We define the negative log-likelihood function via a call to IBSLIKE
 % (IBSLIKE provides a vectorized implementation of IBS for MATLAB; check
 % out IBS_BASIC for a bare bone implementation)
 
-% We set 10 reps for the IBS estimator (see Section 4.4 in the paper) -
-% note that this is also the default for IBSLIKE
+% We set 10 reps for the IBS estimator (see "Iterative multi-fidelity" 
+% section in the Methods of the  paper). Note that this is also the default 
+% for IBSLIKE
+% We also tell IBSLIKE to return as a second output the standard deviation 
+% of the estimate (as opposed to the variance). This is very important!
+
+options_ibs = ibslike('defaults');
 options_ibs.Nreps = 10;
+options_ibs.ReturnStd  = true;
+
 nllfun_ibs = @(theta) ibslike(@psycho_gen,theta,R,S,options_ibs);
 
 % As a starting point for the optimization, we draw a sample inside the
 % plausible box (in practice you should use multiple restarts!)
 theta0 = rand(size(LB)).*(PUB-PLB) + PLB;
 
-fprintf('Maximum-likelihood estimation with BADS using IBS...\n');
-fprintf('(press a key to continue)\n');
-pause;
+% We inform BADS that IBSLIKE returns noise estimate (SD) as second output
+options = bads('defaults');
+options.UncertaintyHandling = true;
+options.SpecifyTargetNoise = true;  
 
-theta_ibs = bads(nllfun_ibs,theta0,LB,UB,PLB,PUB);
+theta_ibs = bads(nllfun_ibs,theta0,LB,UB,PLB,PUB,[],options);
 
 % Compare with MLE obtained using the analytical log-likelihood expression
 
@@ -62,7 +91,9 @@ fprintf('Maximum-likelihood estimation with BADS using the exact log-likelihood.
 fprintf('(press a key to continue)\n');
 pause;
 
-theta_exact = bads(@(x) psycho_nll(x,S,R),theta0,LB,UB,PLB,PUB);
+options = bads('defaults');
+theta_exact = bads(@(x) psycho_nll(x,S,R),theta0,LB,UB,PLB,PUB,[],options);
+
 
 %% Analysis of results
 
@@ -79,6 +110,7 @@ theta_true
 options_ibs.Nreps = 100;
 
 % IBSLIKE returns as second output the variance of the IBS estimate
+% (please note that this might change in future versions)
 [nll_ibs,nll_var] = ibslike(@psycho_gen,theta_ibs,R,S,options_ibs);
 nll_exact = psycho_nll(theta_exact,S,R);
 
@@ -92,4 +124,74 @@ fprintf('Log-likelihood at the exact-found solution: %.2f.\n',-nll_exact);
 % parameters due to finiteness of the dataset (we expect to recover the 
 % true data generating parameters in the limit NTRIALS -> infinity)
 
-% Luigi Acerbi, 2020
+
+%% Bayesian posterior estimation
+
+close all;
+
+% We now fit the same data via a method that computes the Bayesian posterior
+% over model parameters, called Variational Bayesian Monte Carlo (VBMC).
+% If you do not have the VBMC toolbox installed, you can freely download it 
+% from here: https://github.com/lacerbi/vbmc
+
+fprintf('Bayesian posterior estimation with Variational Bayesian Monte Carlo (VBMC) using IBS...\n');
+fprintf('(press a key to continue)\n');
+pause;
+
+if isempty(which('vbmc.m'))                     % Check that you have VBMC
+    error('VBMC not found. You can install it from here: https://github.com/lacerbi/vbmc');
+end
+
+folder = fileparts(which('vbmc.m'));
+addpath([folder filesep 'utils']);  % Ensure that UTILS is on the path
+
+% For VBMC, we need to return the POSITIVE log-likelihood as first output, 
+% and the standard deviation (not variance!) of the estimate as second
+% output.
+
+% Options for IBSLIKE
+options_ibs = ibslike('defaults');
+options_ibs.Nreps = 100;            % Try and have a SD ~ 1 (and below 3)
+options_ibs.ReturnPositive = true;  % Return *positive* log-likelihood
+options_ibs.ReturnStd  = true;      % 2nd output is SD (not variance!)
+
+llfun = @(theta) ibslike(@psycho_gen,theta,R,S,options_ibs);
+
+% We add a trapezoidal or "tent" prior over the parameters (flat between 
+% PLB and PUB, and linearly decreasing to 0 towards LB and UB). 
+lpriorfun = @(x) log(mtrapezpdf(x,LB,PLB,PUB,UB));
+
+% Since LLFUN has now two outputs (the log likelihood at X, and the
+% estimated SD of the log likelihood at X), we cannot directly sum the log
+% prior from LPRIORFUN and the log likelihood from LLFUN.
+% Thus, we use an auxiliary function LPOSTFUN that does exactly this. 
+
+fun = @(x) lpostfun(x,llfun,lpriorfun);     % Log joint
+
+% FUN will have two outputs: the first output is the sum of LLFUN and 
+% LPRIORFUN (the log joint), and the second output is the variability of
+% LLFUN (that is, the second output of LLFUN). It is assumed that the prior
+% can be computed analytically and adds no noise.
+
+% Here we could use as starting point the result of a run of BADS
+theta0 = 0.5*(PLB+PUB);
+options = vbmc('defaults');
+options.Plot = true;        % Plot iterations
+options.SpecifyTargetNoise = true;  % Noisy function evaluations 
+
+% Run VBMC
+[vp,elbo,elbo_sd] = vbmc(fun,theta0,LB,UB,PLB,PUB,options);
+
+close all;
+
+Xs = vbmc_rnd(vp,3e5);  % Generate samples from the variational posterior
+
+close all;
+cornerplot(Xs,{'\eta (log noise)','bias','lapse'},[eta,bias,lapse]);
+
+fprintf('  Have a look at the triangle-plot visualization of the approximate posterior.\n')
+fprintf('  The black line represents the true generating parameters for the fake dataset.\n')
+fprintf('  For more information, see tutorials and FAQ at <a href="https://github.com/lacerbi/vbmc">https://github.com/lacerbi/vbmc</a>.\n')
+
+
+% Luigi Acerbi, 2021
