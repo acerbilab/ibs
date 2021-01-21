@@ -225,7 +225,7 @@ end
 nlogL = sum(nlogL.*weights);
 if options.ReturnPositive; nlogL = -nlogL; end
 if nargout > 1
-    nlogLvar = sum(nlogLvar.*weights);
+    nlogLvar = sum(nlogLvar.*(weights.^2));
     if options.ReturnStd    % Return standard deviation instead of variance
         nlogLvar = sqrt(nlogLvar);
     end

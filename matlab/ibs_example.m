@@ -107,15 +107,18 @@ theta_true
 
 % We compute now the log-likelihood at the returned solution with higher
 % precision (100 repeats), and estimate its uncertainty
+
+options_ibs = ibslike('defaults');
 options_ibs.Nreps = 100;
+options_ibs.ReturnStd  = true;
 
 % IBSLIKE returns as second output the variance of the IBS estimate
 % (please note that this might change in future versions)
-[nll_ibs,nll_var] = ibslike(@psycho_gen,theta_ibs,R,S,options_ibs);
+[nll_ibs,nll_std] = ibslike(@psycho_gen,theta_ibs,R,S,options_ibs);
 nll_exact = psycho_nll(theta_exact,S,R);
 
 fprintf('Estimated log-likelihood at the IBS-found solution: %.2f +/- %.2f (exact value: %.2f).\n', ...
-    -nll_ibs,sqrt(nll_var),-psycho_nll(theta_ibs,S,R));
+    -nll_ibs,nll_std,-psycho_nll(theta_ibs,S,R));
 
 % We also evaluate the MLE found exactly
 fprintf('Log-likelihood at the exact-found solution: %.2f.\n',-nll_exact);
