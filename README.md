@@ -35,12 +35,12 @@ If you use IBS in conjunction with [Bayesian Adaptive Direct Search](https://git
 
 and cite the appropriate paper:
 
-2. Acerbi, L. & Ma, W. J. (2017). Practical Bayesian optimization for model fitting with Bayesian Adaptive Direct Search. In *Advances in Neural Information Processing Systems 30*:1834-1844.
+2. Acerbi, L. & Ma, W. J. (2017). Practical Bayesian optimization for model fitting with Bayesian Adaptive Direct Search. In *Advances in Neural Information Processing Systems* 30:1834-1844.
 
 Similarly, if you use IBS in combination with [Variational Bayesian Monte Carlo](https://github.com/lacerbi/vbmc), you should cite these papers:
 
-3. Acerbi, L. (2018). Variational Bayesian Monte Carlo. In *Advances in Neural Information Processing Systems 31*: 8222-8232.
-4. Acerbi, L. (2020). Variational Bayesian Monte Carlo with Noisy Likelihoods. In *Advances in Neural Information Processing Systems 33*: 8211-8222.
+3. Acerbi, L. (2018). Variational Bayesian Monte Carlo. In *Advances in Neural Information Processing Systems* 31: 8222-8232.
+4. Acerbi, L. (2020). Variational Bayesian Monte Carlo with Noisy Likelihoods. In *Advances in Neural Information Processing Systems* 33: 8211-8222.
 
 Besides formal citations, you can demonstrate your appreciation for our work in the following ways:
 
