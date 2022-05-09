@@ -47,16 +47,24 @@ PUB = [log(5) 1 0.2];
 % noisy target functions.
 % If you do not have the BADS toolbox installed, you can freely download it 
 % from here: https://github.com/lacerbi/bads
-% Please ensure you have the latest version of BADS installed (v1.0.6 or
+% Please ensure you have the latest version of BADS installed (v1.0.8 or
 % more), as it incorporates tweaks that improve performance with IBS.
 
 fprintf('Maximum-likelihood estimation with BADS using IBS...\n');
-fprintf('(press a key to continue)\n');
-pause;
 
 if isempty(which('bads.m'))                     % Check that you have BADS
     error('BADS not found. You can install it from here: https://github.com/lacerbi/bads');
 end
+
+try
+    bads_version = bads('version');
+    fprintf('BADS found (version %s).\n', bads_version);
+catch
+    error('You have installed an older version of BADS. You can find the latest version here: https://github.com/lacerbi/bads');    
+end
+
+fprintf('(press a key to continue)\n');
+pause;
 
 % We define the negative log-likelihood function via a call to IBSLIKE
 % (IBSLIKE provides a vectorized implementation of IBS for MATLAB; check
@@ -80,7 +88,6 @@ theta0 = rand(size(LB)).*(PUB-PLB) + PLB;
 
 % We inform BADS that IBSLIKE returns noise estimate (SD) as second output
 options = bads('defaults');
-options.UncertaintyHandling = true;
 options.SpecifyTargetNoise = true;  
 
 theta_ibs = bads(nllfun_ibs,theta0,LB,UB,PLB,PUB,[],options);
@@ -197,4 +204,4 @@ fprintf('  The black line represents the true generating parameters for the fake
 fprintf('  For more information, see tutorials and FAQ at <a href="https://github.com/lacerbi/vbmc">https://github.com/lacerbi/vbmc</a>.\n')
 
 
-% Luigi Acerbi, 2021
+% Luigi Acerbi, 2021-2022
