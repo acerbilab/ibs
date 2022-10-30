@@ -1,6 +1,6 @@
 # Inverse binomial sampling (IBS)
 
-## What is it
+## What is it?
 
 IBS is a technique to obtain unbiased, efficient estimates of the log-likelihood of a model by simulation. [[1](#references)]
 
