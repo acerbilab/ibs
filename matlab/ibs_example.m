@@ -46,21 +46,21 @@ PUB = [log(5) 1 0.2];
 % Direct Search (BADS), a particularly effective optimization algorithm for
 % noisy target functions.
 % If you do not have the BADS toolbox installed, you can freely download it 
-% from here: https://github.com/lacerbi/bads
+% from here: https://github.com/acerbilab/bads
 % Please ensure you have the latest version of BADS installed (v1.0.8 or
 % more), as it incorporates tweaks that improve performance with IBS.
 
 fprintf('Maximum-likelihood estimation with BADS using IBS...\n');
 
 if isempty(which('bads.m'))                     % Check that you have BADS
-    error('BADS not found. You can install it from here: https://github.com/lacerbi/bads');
+    error('BADS not found. You can install it from here: https://github.com/acerbilab/bads');
 end
 
 try
     bads_version = bads('version');
     fprintf('BADS found (version %s).\n', bads_version);
 catch
-    error('You have installed an older version of BADS. You can find the latest version here: https://github.com/lacerbi/bads');    
+    error('You have installed an older version of BADS. You can find the latest version here: https://github.com/acerbilab/bads');    
 end
 
 fprintf('(press a key to continue)\n');
@@ -142,14 +142,14 @@ close all;
 % We now fit the same data via a method that computes the Bayesian posterior
 % over model parameters, called Variational Bayesian Monte Carlo (VBMC).
 % If you do not have the VBMC toolbox installed, you can freely download it 
-% from here: https://github.com/lacerbi/vbmc
+% from here: https://github.com/acerbilab/vbmc
 
 fprintf('Bayesian posterior estimation with Variational Bayesian Monte Carlo (VBMC) using IBS...\n');
 fprintf('(press a key to continue)\n');
 pause;
 
 if isempty(which('vbmc.m'))                     % Check that you have VBMC
-    error('VBMC not found. You can install it from here: https://github.com/lacerbi/vbmc');
+    error('VBMC not found. You can install it from here: https://github.com/acerbilab/vbmc');
 end
 
 folder = fileparts(which('vbmc.m'));
@@ -201,7 +201,7 @@ cornerplot(Xs,{'\eta (log noise)','bias','lapse'},[eta,bias,lapse]);
 
 fprintf('  Have a look at the triangle-plot visualization of the approximate posterior.\n')
 fprintf('  The black line represents the true generating parameters for the fake dataset.\n')
-fprintf('  For more information, see tutorials and FAQ at <a href="https://github.com/lacerbi/vbmc">https://github.com/lacerbi/vbmc</a>.\n')
+fprintf('  For more information, see tutorials and FAQ at <a href="https://github.com/acerbilab/vbmc">https://github.com/acerbilab/vbmc</a>.\n')
 
 
 % Luigi Acerbi, 2021-2022
