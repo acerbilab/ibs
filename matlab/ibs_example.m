@@ -47,7 +47,7 @@ PUB = [log(5) 1 0.2];
 % noisy target functions.
 % If you do not have the BADS toolbox installed, you can freely download it 
 % from here: https://github.com/acerbilab/bads
-% Please ensure you have the latest version of BADS installed (v1.0.8 or
+% Please ensure you have the latest version of BADS installed (v1.1.1 or
 % more), as it incorporates tweaks that improve performance with IBS.
 
 fprintf('Maximum-likelihood estimation with BADS using IBS...\n');
@@ -56,11 +56,21 @@ if isempty(which('bads.m'))                     % Check that you have BADS
     error('BADS not found. You can install it from here: https://github.com/acerbilab/bads');
 end
 
+old_bads = false;
 try
     bads_version = bads('version');
     fprintf('BADS found (version %s).\n', bads_version);
+    bads_version(bads_version == '.') = ' ';
+    bads_version = str2num(bads_version);
+    if bads_version(2) < 1
+        old_bads = true;
+    end
 catch
-    error('You have installed an older version of BADS. You can find the latest version here: https://github.com/acerbilab/bads');    
+    old_bads = true;
+end
+
+if old_bads
+    error('You have installed an older version of BADS. You can find the latest version here: https://github.com/acerbilab/bads');        
 end
 
 fprintf('(press a key to continue)\n');
