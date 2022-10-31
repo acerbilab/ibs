@@ -46,7 +46,24 @@ Besides formal citations, you can demonstrate your appreciation for our work in 
 
 - *Star* the IBS repository on GitHub;
 - Follow us on Twitter ([Luigi](https://twitter.com/AcerbiLuigi), [Bas](https://twitter.com/basvanopheusden)) for updates about IBS and other projects we are involved with;
-- Tell us about your model-fitting problem and your experience with IBS (positive or negative) at <luigi.acerbi@helsinki.fi> or <svo@princeton.edu> (putting 'IBS' in the subject of the email).
+- Tell us about your model-fitting problem and your experience with IBS (positive or negative) in the [Discussions forum](https://github.com/orgs/acerbilab/discussions).
+
+### BibTex
+
+```
+@article{vanOpheusden2020unbiased,
+  title = {Unbiased and Efficient Log-Likelihood Estimation with Inverse Binomial Sampling},
+  author = {van Opheusden, Bas and Acerbi, Luigi and Ma, Wei Ji},
+  year = {2020},
+  journal = {PLOS Computational Biology},
+  volume = {16},
+  number = {12},
+  pages = {e1008483},
+  publisher = {{Public Library of Science}},
+  issn = {1553-7358},
+  doi = {10.1371/journal.pcbi.1008483},
+}
+```
 
 ### License
 
