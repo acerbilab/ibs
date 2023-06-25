@@ -1,34 +1,37 @@
 # Inverse binomial sampling (IBS)
 
+This repository contains MATLAB implementations and examples of IBS. For Python implementations, see [PyIBS](https://github.com/acerbilab/pyibs).
+
 ## What is it?
 
-IBS is a technique to obtain unbiased, efficient estimates of the log-likelihood of a model by simulation. [[1](#references)]
+Inverse binomial sampling (IBS) is a technique to obtain unbiased, efficient estimates of the log-likelihood of a model by simulation. [[1](#references)]
 
 The typical scenario is the case in which you have a *simulator*, that is a model from which you can randomly draw synthetic observations (for a given parameter vector), but cannot evaluate the log-likelihood analytically or numerically. In other words, IBS affords likelihood-based inference for models without explicit likelihood functions (also known as implicit models).
 
 ## Quickstart
 
-This repository contains MATLAB implementations and examples of IBS. For Python implementations, see [PyIBS]().
 
-Start with the tutorial in `ibs_example.m`, which contains a full walkthrough with working example usages of IBS.
+The main function is `ibslike.m`, which computes the estimate of the negative log-likelihood for a given simulator model and dataset via IBS.
+We recommend to start with the tutorial in `ibs_example.m`, which contains a full walkthrough with working example usages of IBS.
 
 IBS is commonly used as a part of an algorithm for maximum-likelihood estimation or Bayesian inference:
-- For maximum-likelihood (or maximum-a-posteriori) estimation, we recommend to use IBS combined with [Bayesian Adaptive Direct Search (BADS)](https://github.com/acerbilab/bads). BADS is required to run the tutorial.
-- For Bayesian inference of posterior distributions and model evidence, we recommend to use IBS with [Variational Bayesian Monte Carlo (VBMC)](https://github.com/acerbilab/vbmc). VBMC is recommended to run the full tutorial.
+- For maximum-likelihood (or maximum-a-posteriori) estimation, we recommend to use IBS combined with [Bayesian Adaptive Direct Search (BADS)](https://github.com/acerbilab/bads). BADS is required to run the first part of the tutorial.
+- For Bayesian inference of posterior distributions and model evidence, we recommend to use IBS with [Variational Bayesian Monte Carlo (VBMC)](https://github.com/acerbilab/vbmc). VBMC is required to run the second part of the tutorial.
 
 For practical recommendations and any other question, check out the FAQ on the [IBS wiki](https://github.com/acerbilab/ibs/wiki).
 
 ## Code
 
-We describe below the other files in this repository:
+We describe below the files in this repository:
 
 - `ibs_basic.m` is a bare-bone implementation of IBS for didactic purposes.
-- `ibslike.m` is an advanced vectorized implementation of IBS, which supports several advanced features (still work in progress as we add more advanced features). Please read the documentation in the file for usage information, and refer to the [dedicated section on the FAQ](https://github.com/acerbilab/ibs/wiki#matlab-implementation-ibslike) for specific questions about this MATLAB implementation.
+- `ibslike.m` is an advanced vectorized implementation of IBS, which supports several advanced features (still work in progress as we add more features). Please read the documentation in the file for usage information, and refer to the [dedicated section on the FAQ](https://github.com/acerbilab/ibs/wiki#matlab-implementation-ibslike) for specific questions about this MATLAB implementation.
   - Note that `ibslike` returns the *negative* log-likelihood as it is meant to be used with an optimization method such as BADS.
   - Run `ibslike('test')` for a battery of unit tests.
   - If you want to run `ibslike` with [Variational Bayesian Monte Carlo](https://github.com/acerbilab/vbmc) (VBMC), note that you need to set the IBS options as
     - `OPTIONS.ReturnPositive = true` to return the *positive* log-likelihood;
     - `OPTIONS.ReturnStd = true` to return as second output the standard deviation (SD) of the estimate (as opposed to the variance).
+- `ibs_example.m` is a tutorial with usage cases for IBS.
 - `psycho_gen.m` and `psycho_nll.m` are functions implementing, respectively, the generative model (simulator) and the negative log-likelihood function for the orientation discrimination model used as example in the tutorial (see also Section 5.2 in the IBS paper).
 
 The code used to produce results in the paper [[1](#references)] is available in the development repository [here](https://github.com/basvanopheusden/ibs-development).
